@@ -1,0 +1,27 @@
+Question 1: 
+
+How many users do we have? 130
+
+select distinct count(user_id) from dev_db.dbt_ttogiaucscedu.stg_postgres_users
+
+Question 2:
+
+select  count(order_id) / (datediff(second,min(created_at), max(created_at)) / 3600)
+as avg_orders_per_hour from dev_db.dbt_ttogiaucscedu.stg_postgres_orders
+
+Question 3:
+
+On average, how long does an order take from being placed to being delivered? 3.8hrs
+
+select avg(datediff(second,created_at, delivered_at)) / 3600 / 24 as avg_delivery_time from dev_db.dbt_ttogiaucscedu.stg_postgres_orders
+
+Question 4:
+
+How many users have only made one purchase? Two purchases? Three+ purchases?
+
+with total_orders as (select user_id, count(order_id) as number_of_orders from DEV_DB.DBT_TTOGIAUCSCEDU.STG_POSTGRES_ORDERS group by user_id)
+
+  --(select count(user_id) from total_orders where number_of_orders = 1) 25
+  --(select count(user_id) from total_orders where number_of_orders = 2) 28
+  --(select count(user_id) from total_orders where number_of_orders >= 3) 71
+
